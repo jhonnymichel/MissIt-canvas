@@ -1,6 +1,6 @@
 class Square {
   static get SIZE() {
-    return 40;
+    return 40 * (window.innerWidth / 2500);
   }
 
   constructor(game, color='#00FF00') {

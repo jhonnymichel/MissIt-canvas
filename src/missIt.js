@@ -19,7 +19,7 @@ class MissIt {
       x: 40,
       y: 40,
       width: this.canvas.width - 80,
-      height: this.canvas.height - 80
+      height: this.canvas.height - 160
     };
     //INSTANCE OUR HERO!
     this.hero = new Hero(this.game, '#00FF00');
@@ -39,24 +39,16 @@ class MissIt {
 
   drawBackground() {
     this.ctx.fillStyle = "#FF0000";
-    this.ctx.fillRect(20, 20, this.canvas.width - 40, this.canvas.height - 40);
+    this.ctx.fillRect(20, 20, this.canvas.width - 40, this.canvas.height - 120);
 
     this.ctx.beginPath();
     this.ctx.rect(this.area.x, this.area.y, this.area.width, this.area.height);
-    this.ctx.fillStyle = '#FFF';
+    this.ctx.fillStyle = '#eee';
     this.ctx.fill();
-  }
-
-  gameOver() {
-    // nothing happens so far
   }
 
   spawnEnemy() {
     this.enemies.push(new Enemy(this.game, '#0000FF'));
-  }
-
-  shouldHeroDie() {
-    return this._isColliding;
   }
 
   update() {
@@ -64,11 +56,24 @@ class MissIt {
     this.hero.update(this.ctx);
     this.enemies.forEach(enemy => enemy.update(this.ctx));
     this.enemies.forEach(this.checkCollision);
-    if (this.shouldHeroDie()) {
-      this.gameOver();
-    } else {
+    this.updateScore();
+    if (!this._isGameOver) {
       requestAnimationFrame(this.update);
     }
+  }
+
+  updateScore() {
+
+    this.ctx.fillStyle = "#fff";
+    this.ctx.fillRect(
+      20,
+      this.canvas.height - 60,
+      this.canvas.width,
+      100
+    );
+    this.ctx.fillStyle = "#000";
+    this.ctx.font = "30px Arial";
+    this.ctx.fillText(this.game.score,20,this.canvas.height - 30);
   }
 
   checkCollision(enemy) {
@@ -79,7 +84,7 @@ class MissIt {
     const lowerY = Math.min(enemy.y, this.hero.y);
 
     if (higherX - lowerX < Square.SIZE && higherY - lowerY < Square.SIZE) {
-      this._isColliding = true;
+      this._isGameOver = true;
     }
   }
 
