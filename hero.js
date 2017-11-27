@@ -9,11 +9,18 @@ class Hero extends Square {
     this.movement = {
       x: 0, y: 0
     };
+    this.keysPressed = {
+      [Keyboard.DOWN]: false,
+      [Keyboard.UP]: false,
+      [Keyboard.LEFT]: false,
+      [Keyboard.RIGHT]: false
+    };
     window.addEventListener('keydown', this.setMovementAxis);
     window.addEventListener('keyup', this.resetMovementAxis);
   }
 
   setMovementAxis(e) {
+    this.keysPressed[e.keyCode] = true;
     switch(e.keyCode) {
       case Keyboard.DOWN:
         this.movement.y = 1;
@@ -33,10 +40,15 @@ class Hero extends Square {
   }
 
   resetMovementAxis(e) {
+    this.keysPressed[e.keyCode] = true;
     if (e.keyCode === Keyboard.LEFT || e.keyCode === Keyboard.RIGHT) {
       this.movement.x = 0;
     } else if (e.keyCode === Keyboard.DOWN || e.keyCode === Keyboard.UP) {
       this.movement.y = 0;
+    }
+
+    for (key in this.keysPressed) {
+      if ()
     }
   }
 
