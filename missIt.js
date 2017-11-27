@@ -60,6 +60,7 @@ class MissIt {
   }
 
   startGame() {
+    this.game.start();
     this.update();
   }
 }
