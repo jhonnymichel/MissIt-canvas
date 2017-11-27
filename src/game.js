@@ -14,7 +14,7 @@ class Game {
 
   reset() {
     this.pause();
-    this.speed = 10;
+    this.speed = 1;
   }
 
   get speed() {
@@ -22,6 +22,8 @@ class Game {
   }
 
   set speed(incrementer) {
+    if (this._speed >= 30) return;
+    window.dispatchEvent(new CustomEvent("speedchanged"));
     this._speed = incrementer;
   }
 }

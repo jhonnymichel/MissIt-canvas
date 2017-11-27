@@ -1,6 +1,7 @@
 import Game from './game.js';
 import Hero from './hero.js';
 import Square from './square.js';
+import Enemy from './enemy.js';
 
 class MissIt {
   constructor() {
@@ -9,6 +10,7 @@ class MissIt {
     this.startGame = this.startGame.bind(this);
     this.setCanvasSize = this.setCanvasSize.bind(this);
     this.update = this.update.bind(this);
+    this.spawnEnemy = this.spawnEnemy.bind(this);
 
     this.setCanvasSize();
     this.game = new Game();
@@ -20,6 +22,7 @@ class MissIt {
     };
     //INSTANCE OUR HERO!
     this.hero = new Hero(this.game, '#00FF00');
+    this.enemies = [];
 
     //START THE GAME
     this.startGame();
@@ -45,6 +48,10 @@ class MissIt {
     // nothing happens so far
   }
 
+  spawnEnemy() {
+    this.enemies.push(new Enemy(this.game, '#0000FF'));
+  }
+
   shouldHeroDie() {
     return false;
   }
@@ -57,9 +64,12 @@ class MissIt {
     } else {
       requestAnimationFrame(this.update);
     }
+    this.enemies.forEach(enemy => enemy.update(this.ctx));
   }
 
   startGame() {
+    window.addEventListener('speedchanged', this.spawnEnemy);
+    this.enemies.push(new Enemy(this.game, '#0000FF'));
     this.game.start();
     this.update();
   }
