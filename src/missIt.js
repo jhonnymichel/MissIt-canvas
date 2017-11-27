@@ -5,15 +5,29 @@ import Enemy from './enemy.js';
 
 class MissIt {
   constructor() {
-    this.canvas = document.getElementById('missIt');
-    this.ctx = this.canvas.getContext('2d');
+    this.bindMethods();
+
+    this.initializeCanvas();
+    this.initializeGameObjects();
+    this.startGame();
+  }
+
+  bindMethods() {
     this.startGame = this.startGame.bind(this);
     this.setCanvasSize = this.setCanvasSize.bind(this);
     this.update = this.update.bind(this);
     this.spawnEnemy = this.spawnEnemy.bind(this);
     this.checkCollision = this.checkCollision.bind(this);
+  }
 
+  initializeCanvas() {
+    this.canvas = document.getElementById('missIt');
+    this.ctx = this.canvas.getContext('2d');
     this.setCanvasSize();
+    window.addEventListener('resize', this.setCanvasSize);
+  }
+
+  initializeGameObjects() {
     this.game = new Game();
     this.game.area = this.area = {
       x: 40,
@@ -21,15 +35,17 @@ class MissIt {
       width: this.canvas.width - 80,
       height: this.canvas.height - 160
     };
-    //INSTANCE OUR HERO!
+    this.enemies = [];
     this.hero = new Hero(this.game, '#00FF00');
     this.hero.x = (this.game.area.width * 0.5) - (Square.SIZE * 0.5);
     this.hero.y = (this.game.area.height * 0.5) - (Square.SIZE * 0.5);
-    this.enemies = [];
+  }
 
-    //START THE GAME
-    this.startGame();
-    window.addEventListener('resize', this.setCanvasSize);
+  startGame() {
+    window.addEventListener('speedchanged', this.spawnEnemy);
+    this.enemies.push(new Enemy(this.game, '#0000FF'));
+    this.game.start();
+    this.update();
   }
 
   setCanvasSize() {
@@ -51,19 +67,7 @@ class MissIt {
     this.enemies.push(new Enemy(this.game, '#0000FF'));
   }
 
-  update() {
-    this.drawBackground();
-    this.hero.update(this.ctx);
-    this.enemies.forEach(enemy => enemy.update(this.ctx));
-    this.enemies.forEach(this.checkCollision);
-    this.updateScore();
-    if (!this._isGameOver) {
-      requestAnimationFrame(this.update);
-    }
-  }
-
   updateScore() {
-
     this.ctx.fillStyle = "#fff";
     this.ctx.fillRect(
       20,
@@ -87,12 +91,16 @@ class MissIt {
       this._isGameOver = true;
     }
   }
-
-  startGame() {
-    window.addEventListener('speedchanged', this.spawnEnemy);
-    this.enemies.push(new Enemy(this.game, '#0000FF'));
-    this.game.start();
-    this.update();
+  
+  update() {
+    this.drawBackground();
+    this.hero.update(this.ctx);
+    this.enemies.forEach(enemy => enemy.update(this.ctx));
+    this.enemies.forEach(this.checkCollision);
+    this.updateScore();
+    if (!this._isGameOver) {
+      requestAnimationFrame(this.update);
+    }
   }
 }
 
