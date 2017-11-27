@@ -40,9 +40,27 @@ class Hero extends Square {
     }
   }
 
+  isCornered() {
+    return (
+      this._area.x + this._area.width - Square.SIZE === this.x ||
+      this._area.y + this._area.height - Square.SIZE === this.y ||
+      this._area.x === this.x ||
+      this._area.y === this.y
+    );
+  }
+
+  isStandingStill() {
+    return (this.movement.x + this.movement.y === 0);
+  };
+
   update(ctx) {
     this.x += this.movement.x * this._game.speed;
     this.y += this.movement.y * this._game.speed;
+    if (this.isCornered() || this.isStandingStill()) {
+      window.dispatchEvent(new CustomEvent('stallscore'));
+    } else {
+      window.dispatchEvent(new CustomEvent('startscore'));
+    }
     super.update(ctx);
   }
 
