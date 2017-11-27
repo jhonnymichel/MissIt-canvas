@@ -1,0 +1,25 @@
+{
+  "name": "y",
+  "version": "0.0.1",
+  "description": "Just a canvas version of Miss It Atari game",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jhonnymichel/MissIt-canvas.git"
+  },
+  "keywords": [
+    "Atari",
+    "Canvas",
+    "JS",
+    "ES6"
+  ],
+  "author": "Jhonny Michel <jhonnymichel@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jhonnymichel/MissIt-canvas/issues"
+  },
+  "homepage": "https://github.com/jhonnymichel/MissIt-canvas#readme"
+}
