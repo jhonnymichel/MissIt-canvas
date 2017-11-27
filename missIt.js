@@ -1,63 +1,6 @@
-class Keyboard {
-  get DOWN() {
-    return 40;
-  }
-  get UP() {
-    return 38;
-  }
-  get LEFT() {
-    return 37;
-  }
-  get RIGHT() {
-    return 39;
-  }
-}
-
-class Square {
-  static get SIZE() {
-    return 20;
-  }
-
-  constructor(area, color) {
-    this._area = area;
-    this.x = 0;
-    this.y = 0;
-    this._color = color || '#00FF00';
-  }
-
-  update(ctx) {
-    ctx.beginPath();
-    ctx.rect(this.x, this.y, Square.SIZE, Square.SIZE);
-    ctx.fillStyle = this._color;
-    ctx.fill();
-  }
-
-  get x() {
-    return this._x;
-  }
-
-  set x(x) {
-    if (x > this._area.width - Square.SIZE) {
-      x = this._area.width - Square.SIZE;
-    } else if (x < this._area.x) {
-      x = this._area.x;
-    }
-    this._x = x;
-  }
-
-  get y() {
-    return this._y;
-  }
-
-  set y(y) {
-    if (y > this._area.height - 20) {
-      y = this._area.height - 20;
-    } else if (y < this._area.y) {
-      y = this._area.y;
-    }
-    this._y = y;
-  }
-}
+import Game from './game.js';
+import Hero from './hero.js';
+import Square from './square.js';
 
 class MissIt {
   constructor() {
@@ -68,14 +11,17 @@ class MissIt {
     this.update = this.update.bind(this);
 
     this.setCanvasSize();
-    this.area = {
+    this.game = new Game();
+    this.game.area = this.area = {
       x: 40,
       y: 40,
       width: this.canvas.width - 80,
       height: this.canvas.height - 80
-    }
+    };
     //INSTANCE OUR HERO!
-    this.hero = new Square(this.area);
+    this.hero = new Hero(this.game, '#00FF00');
+
+    //START THE GAME
     this.startGame();
     window.addEventListener('resize', this.setCanvasSize);
   }
