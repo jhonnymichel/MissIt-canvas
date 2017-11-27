@@ -1,6 +1,6 @@
 class Square {
   static get SIZE() {
-    return 20;
+    return 40;
   }
 
   constructor(game, color='#00FF00') {
@@ -36,8 +36,8 @@ class Square {
   }
 
   set y(y) {
-    if (y > this._area.y + this._area.height - 20) {
-      y = this._area.y + this._area.height - 20;
+    if (y > this._area.y + this._area.height - Square.SIZE) {
+      y = this._area.y + this._area.height - Square.SIZE;
     } else if (y < this._area.y) {
       y = this._area.y;
     }
