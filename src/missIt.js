@@ -11,6 +11,7 @@ class MissIt {
     this.setCanvasSize = this.setCanvasSize.bind(this);
     this.update = this.update.bind(this);
     this.spawnEnemy = this.spawnEnemy.bind(this);
+    this.checkCollision = this.checkCollision.bind(this);
 
     this.setCanvasSize();
     this.game = new Game();
@@ -22,6 +23,8 @@ class MissIt {
     };
     //INSTANCE OUR HERO!
     this.hero = new Hero(this.game, '#00FF00');
+    this.hero.x = (this.game.area.width * 0.5) - (Square.SIZE * 0.5);
+    this.hero.y = (this.game.area.height * 0.5) - (Square.SIZE * 0.5);
     this.enemies = [];
 
     //START THE GAME
@@ -53,18 +56,31 @@ class MissIt {
   }
 
   shouldHeroDie() {
-    return false;
+    return this._isColliding;
   }
 
   update() {
     this.drawBackground();
     this.hero.update(this.ctx);
+    this.enemies.forEach(enemy => enemy.update(this.ctx));
+    this.enemies.forEach(this.checkCollision);
     if (this.shouldHeroDie()) {
       this.gameOver();
     } else {
       requestAnimationFrame(this.update);
     }
-    this.enemies.forEach(enemy => enemy.update(this.ctx));
+  }
+
+  checkCollision(enemy) {
+    const higherX = Math.max(enemy.x, this.hero.x);
+    const lowerX = Math.min(enemy.x, this.hero.x);
+
+    const higherY = Math.max(enemy.y, this.hero.y);
+    const lowerY = Math.min(enemy.y, this.hero.y);
+
+    if (higherX - lowerX < Square.SIZE && higherY - lowerY < Square.SIZE) {
+      this._isColliding = true;
+    }
   }
 
   startGame() {
