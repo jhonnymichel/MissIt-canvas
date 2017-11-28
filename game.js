@@ -33,7 +33,7 @@ class Game {
   }
 
   incrementScore() {
-    this.score += 1 + (Game.INITIAL_SPEED - this.speed);
+    this.score += 1 + Math.ceil(this.speed - Game.INITIAL_SPEED);
   }
 
   pause() {
