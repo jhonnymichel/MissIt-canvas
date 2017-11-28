@@ -19,6 +19,7 @@ class MissIt {
 
   bindMethods() {
     this.startGame = this.startGame.bind(this);
+    this.restartGame = this.restartGame.bind(this);
     this.setCanvasSize = this.setCanvasSize.bind(this);
     this.update = this.update.bind(this);
     this.spawnEnemy = this.spawnEnemy.bind(this);
@@ -80,7 +81,7 @@ class MissIt {
   }
 
   drawBackground() {
-    this.ctx.fillStyle = "#FF0000";
+    this.ctx.fillStyle = '#FF0000';
     this.ctx.fillRect(MissIt.PADDING, MissIt.PADDING, this.canvas.width - MissIt.PADDING * 2, this.canvas.height - MissIt.PADDING * 6);
 
     this.ctx.beginPath();
@@ -93,8 +94,8 @@ class MissIt {
     this.enemies.push(new Enemy(this.game, '#0000FF'));
   }
 
-  updateScore() {
-    this.ctx.fillStyle = "#fff";
+  updateGameText() {
+    this.ctx.fillStyle = '#fff';
     const scoreBackgroundArea = {
       x: MissIt.PADDING,
       y: MissIt.PADDING * 3 + this.area.height,
@@ -108,15 +109,43 @@ class MissIt {
       scoreBackgroundArea.height
     );
 
-    this.ctx.fillStyle = "#000";
-    this.ctx.font = "80px Arial";
-    this.ctx.textAlign="center";
-    this.ctx.textBaseline = "middle";
+    this.ctx.fillStyle = '#000';
+    this.ctx.font = '80px Arial';
+    this.ctx.textAlign='center';
+    this.ctx.textBaseline = 'middle';
     this.ctx.fillText(
       this.game.score,
       scoreBackgroundArea.width * 0.5,
       scoreBackgroundArea.y + scoreBackgroundArea.height * 0.45
     );
+
+    if (this._isGameOver) {
+      this.ctx.font = '40px Arial';
+      this.ctx.fillText(
+        'Game Over!\nPress any key to restart!',
+        this.canvas.width * 0.5,
+        (this.area.height + MissIt.PADDING) * 0.5
+      )
+    }
+  }
+
+  gameOver() {
+    this._isGameOver = true;
+    this.hero.destroy();
+    this.game.destroy();
+
+    window.removeEventListener('resize', this.setCanvasSize);
+    window.removeEventListener('speedchanged', this.spawnEnemy);
+    window.addEventListener('keypress', this.restartGame);
+  }
+
+  restartGame() {
+    this._isGameOver = false;
+
+    window.removeEventListener('keypress', this.restartGame);
+    this.initializeCanvas();
+    this.initializeGameObjects();
+    this.startGame();
   }
 
   checkCollision(enemy) {
@@ -127,19 +156,20 @@ class MissIt {
     const lowerY = Math.min(enemy.y, this.hero.y);
 
     if (higherX - lowerX < Square.SIZE && higherY - lowerY < Square.SIZE) {
-      this._isGameOver = true;
+      this.gameOver();
     }
   }
   
   update() {
-    this.drawBackground();
-    this.hero.update(this.ctx);
-    this.enemies.forEach(enemy => enemy.update(this.ctx));
-    this.enemies.forEach(this.checkCollision);
-    this.updateScore();
+    this.updateGameText();
     if (!this._isGameOver) {
+      this.drawBackground();
+      this.hero.update(this.ctx);
+      this.enemies.forEach(enemy => enemy.update(this.ctx));
+      this.enemies.forEach(this.checkCollision);
       requestAnimationFrame(this.update);
     }
+
   }
 }
 

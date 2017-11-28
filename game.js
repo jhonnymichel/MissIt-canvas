@@ -17,15 +17,10 @@ class Game {
     this.score = 0;
     this._area = area;
     this.incrementScore = this.incrementScore.bind(this);
-    window.addEventListener('startscore', () => {
-      if (this._isScoring) return;
-      this._isScoring = true;
-      this._scoreIntervalId = setInterval(this.incrementScore, 300);
-    });
-    window.addEventListener('stallscore', () => {
-      this._isScoring = false;
-      clearInterval(this._scoreIntervalId);
-    });
+    this.startScoring = this.startScoring.bind(this);
+    this.stallScore = this.stallScore.bind(this);
+    window.addEventListener('startscore', this.startScoring);
+    window.addEventListener('stallscore', this.stallScore);
   }
 
   start() {
@@ -43,6 +38,24 @@ class Game {
   reset() {
     this.pause();
     this.speed = 1;
+  }
+
+  startScoring() {
+    if (this._isScoring) return;
+    this._isScoring = true;
+    this._scoreIntervalId = setInterval(this.incrementScore, 300);
+  }
+
+  stallScore() {
+    this._isScoring = false;
+    clearInterval(this._scoreIntervalId);
+  }
+
+  destroy() {
+    clearInterval(this._scoreIntervalId);
+    clearInterval(this._intervalId);
+    window.removeEventListener('startscore', this.startScoring);
+    window.removeEventListener('stallscore', this.stallScore);
   }
 
   get speed() {
