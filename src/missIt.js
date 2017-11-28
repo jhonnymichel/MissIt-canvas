@@ -4,6 +4,11 @@ import Square from './square.js';
 import Enemy from './enemy.js';
 
 class MissIt {
+
+  static get PADDING() {
+    return 20;
+  }
+
   constructor() {
     this.bindMethods();
 
@@ -30,10 +35,10 @@ class MissIt {
   initializeGameObjects() {
     this.game = new Game();
     this.game.area = this.area = {
-      x: 40,
-      y: 40,
-      width: this.canvas.width - 80,
-      height: this.canvas.height - 160
+      x: MissIt.PADDING * 2,
+      y: MissIt.PADDING * 2,
+      width: this.canvas.width - MissIt.PADDING * 4,
+      height: this.canvas.height - MissIt.PADDING * 8
     };
     this.enemies = [];
     this.hero = new Hero(this.game, '#00FF00');
@@ -51,11 +56,32 @@ class MissIt {
   setCanvasSize() {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
+    if (this.game) {
+      this.game.area = this.area = {
+        x: MissIt.PADDING * 2,
+        y: MissIt.PADDING * 2,
+        width: this.canvas.width - MissIt.PADDING * 4,
+        height: this.canvas.height - MissIt.PADDING * 8
+      };
+      this.replaceCharactersPositions();
+    }
+  }
+
+  replaceCharactersPositions() {
+    // just trying to set characters position to the same after resize,
+    // the internal X and Y setters will keep them inside the new boundaries.
+    this.enemies.forEach(enemy => {
+      enemy.x = enemy.x;
+      enemy.y = enemy.y;
+    });
+
+    this.hero.x = this.hero.x;
+    this.hero.y = this.hero.y;
   }
 
   drawBackground() {
     this.ctx.fillStyle = "#FF0000";
-    this.ctx.fillRect(20, 20, this.canvas.width - 40, this.canvas.height - 120);
+    this.ctx.fillRect(MissIt.PADDING, MissIt.PADDING, this.canvas.width - MissIt.PADDING * 2, this.canvas.height - MissIt.PADDING * 6);
 
     this.ctx.beginPath();
     this.ctx.rect(this.area.x, this.area.y, this.area.width, this.area.height);
