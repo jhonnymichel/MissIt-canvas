@@ -33,7 +33,7 @@ class Game {
   }
 
   incrementScore() {
-    this.score++;
+    this.score += 1 + (Game.INITIAL_SPEED - this.speed);
   }
 
   pause() {
