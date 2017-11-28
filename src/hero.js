@@ -40,15 +40,34 @@ class Hero extends Square {
   }
 
   resetMovementAxis(e) {
-    this.keysPressed[e.keyCode] = true;
-    if (e.keyCode === Keyboard.LEFT || e.keyCode === Keyboard.RIGHT) {
-      this.movement.x = 0;
-    } else if (e.keyCode === Keyboard.DOWN || e.keyCode === Keyboard.UP) {
-      this.movement.y = 0;
-    }
-
-    for (key in this.keysPressed) {
-      if ()
+    this.keysPressed[e.keyCode] = false;
+    switch(e.keyCode) {
+      case Keyboard.DOWN:
+        this.movement.y = 0;
+        if (this.keysPressed[Keyboard.UP]) {
+          this.setMovementAxis({keyCode: Keyboard.UP})
+        }
+        break;
+      case Keyboard.UP:
+        this.movement.y = 0;
+        if (this.keysPressed[Keyboard.DOWN]) {
+          this.setMovementAxis({keyCode: Keyboard.DOWN})
+        }
+        break;
+      case Keyboard.LEFT:
+        this.movement.x = 0;
+        if (this.keysPressed[Keyboard.RIGHT]) {
+          this.setMovementAxis({keyCode: Keyboard.RIGHT})
+        }
+        break;
+      case Keyboard.RIGHT:
+        this.movement.x = 0;
+        if (this.keysPressed[Keyboard.LEFT]) {
+          this.setMovementAxis({keyCode: Keyboard.LEFT})
+        }
+        break;
+      default:
+        break;
     }
   }
 
