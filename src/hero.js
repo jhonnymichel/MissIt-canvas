@@ -83,6 +83,8 @@ class Hero extends Square {
   }
 
   destroy() {
+    window.dispatchEvent(new CustomEvent('stallscore'));
+
     window.removeEventListener('keydown', this.setMovementAxis);
     window.removeEventListener('keyup', this.resetMovementAxis)
   }
