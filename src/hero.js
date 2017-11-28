@@ -9,34 +9,45 @@ class Hero extends Square {
     this.movement = {
       x: 0, y: 0
     };
+    this.keys = {
+      [Keyboard.DOWN]: {
+        isPressed: false, 
+        opposite: Keyboard.UP, 
+        movement: {axis: 'y', direction: 1}
+      },
+      [Keyboard.UP]: {
+        isPressed: false, 
+        opposite: Keyboard.DOWN, 
+        movement: {axis: 'y', direction: -1}
+      },
+      [Keyboard.LEFT]: {
+        isPressed: false, 
+        opposite: Keyboard.RIGHT, 
+        movement: {axis: 'x', direction: -1}
+      },
+      [Keyboard.RIGHT]: {
+        isPressed: false, 
+        opposite: Keyboard.LEFT, 
+        movement: {axis: 'x', direction: 1}
+      },
+    };
     window.addEventListener('keydown', this.setMovementAxis);
     window.addEventListener('keyup', this.resetMovementAxis);
   }
 
   setMovementAxis(e) {
-    switch(e.keyCode) {
-      case Keyboard.DOWN:
-        this.movement.y = 1;
-        break;
-      case Keyboard.UP:
-        this.movement.y = -1;
-        break;
-      case Keyboard.LEFT:
-        this.movement.x = -1;
-        break;
-      case Keyboard.RIGHT:
-        this.movement.x = 1;
-        break;
-      default:
-        break;
-    }
+    const key = this.keys[e.keyCode];
+    key.isPressed = true;
+    this.movement[key.movement.axis] = key.movement.direction;
   }
 
   resetMovementAxis(e) {
-    if (e.keyCode === Keyboard.LEFT || e.keyCode === Keyboard.RIGHT) {
-      this.movement.x = 0;
-    } else if (e.keyCode === Keyboard.DOWN || e.keyCode === Keyboard.UP) {
-      this.movement.y = 0;
+    const key = this.keys[e.keyCode];
+    key.isPressed = false;
+    if (this.keys[key.opposite].isPressed) {
+      this.setMovementAxis({keyCode: key.opposite});
+    } else {
+      this.movement[key.movement.axis] = 0;
     }
   }
 
