@@ -5,7 +5,6 @@ class Square {
 
   constructor(game, color='#00FF00') {
     this._game = game;
-    this._area = game.area;
     this._color = color;
     this.createAxisProperties();
     this.x = 0;
@@ -23,8 +22,9 @@ class Square {
           return this[`_${axis.name}`];
         },
         set(position) {
-          const maxPositionLimit = this._area[axis.name] + this._area[axis.side] - Square.SIZE;
-          const minPositionLimit = this._area[axis.name];
+          const area = this._game.area;
+          const maxPositionLimit = area[axis.name] + area[axis.side] - Square.SIZE;
+          const minPositionLimit = area[axis.name];
           if (position > maxPositionLimit) {
             position = maxPositionLimit;
           } else if (position < minPositionLimit) {

@@ -15,7 +15,7 @@ class Game {
   constructor(area={x: 0, y: 0, width: 200, height: 200}) {
     this._speed = Game.INITIAL_SPEED;
     this.score = 0;
-    this.area = area;
+    this._area = area;
     this.incrementScore = this.incrementScore.bind(this);
     window.addEventListener('startscore', () => {
       if (this._isScoring) return;

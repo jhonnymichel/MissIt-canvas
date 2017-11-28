@@ -58,11 +58,12 @@ class Hero extends Square {
   }
 
   isCornered() {
+    const area = this._game.area;
     return (
-      this._area.x + this._area.width - Square.SIZE === this.x ||
-      this._area.y + this._area.height - Square.SIZE === this.y ||
-      this._area.x === this.x ||
-      this._area.y === this.y
+      area.x + area.width - Square.SIZE === this.x ||
+      area.y + area.height - Square.SIZE === this.y ||
+      area.x === this.x ||
+      area.y === this.y
     );
   }
 
