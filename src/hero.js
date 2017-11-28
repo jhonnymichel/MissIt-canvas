@@ -37,12 +37,18 @@ class Hero extends Square {
 
   setMovementAxis(e) {
     const key = this.keys[e.keyCode];
+    if (!key) {
+      return;
+    }
     key.isPressed = true;
     this.movement[key.movement.axis] = key.movement.direction;
   }
 
   resetMovementAxis(e) {
     const key = this.keys[e.keyCode];
+    if (!key) {
+      return;
+    }
     key.isPressed = false;
     if (this.keys[key.opposite].isPressed) {
       this.setMovementAxis({keyCode: key.opposite});
@@ -76,7 +82,8 @@ class Hero extends Square {
   }
 
   destroy() {
-    window.removeEventListener('keydown', this.onKeuUp);
+    window.removeEventListener('keydown', this.setMovementAxis);
+    window.removeEventListener('keyup', this.resetMovementAxis)
   }
 }
 
