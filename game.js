@@ -45,10 +45,6 @@ class Game {
     this.speed = 1;
   }
 
-  incrementScore() {
-    this.score++;
-  }
-
   get speed() {
     return this._speed;
   }
