@@ -95,15 +95,28 @@ class MissIt {
 
   updateScore() {
     this.ctx.fillStyle = "#fff";
+    const scoreBackgroundArea = {
+      x: MissIt.PADDING,
+      y: MissIt.PADDING * 3 + this.area.height,
+      width: this.area.width + MissIt.PADDING * 2,
+      height: this.canvas.height - this.area.height - MissIt.PADDING * 2
+    }
     this.ctx.fillRect(
-      20,
-      this.canvas.height - 60,
-      this.canvas.width,
-      100
+      scoreBackgroundArea.x,
+      scoreBackgroundArea.y,
+      scoreBackgroundArea.width,
+      scoreBackgroundArea.height
     );
+
     this.ctx.fillStyle = "#000";
-    this.ctx.font = "30px Arial";
-    this.ctx.fillText(this.game.score,20,this.canvas.height - 30);
+    this.ctx.font = "80px Arial";
+    this.ctx.textAlign="center";
+    this.ctx.textBaseline = "middle";
+    this.ctx.fillText(
+      this.game.score,
+      scoreBackgroundArea.width * 0.5,
+      scoreBackgroundArea.y + scoreBackgroundArea.height * 0.45
+    );
   }
 
   checkCollision(enemy) {
