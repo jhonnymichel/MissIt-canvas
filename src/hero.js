@@ -9,65 +9,45 @@ class Hero extends Square {
     this.movement = {
       x: 0, y: 0
     };
-    this.keysPressed = {
-      [Keyboard.DOWN]: false,
-      [Keyboard.UP]: false,
-      [Keyboard.LEFT]: false,
-      [Keyboard.RIGHT]: false
+    this.keys = {
+      [Keyboard.DOWN]: {
+        isPressed: false, 
+        opposite: Keyboard.UP, 
+        movement: {axis: 'y', direction: 1}
+      },
+      [Keyboard.UP]: {
+        isPressed: false, 
+        opposite: Keyboard.DOWN, 
+        movement: {axis: 'y', direction: -1}
+      },
+      [Keyboard.LEFT]: {
+        isPressed: false, 
+        opposite: Keyboard.RIGHT, 
+        movement: {axis: 'x', direction: -1}
+      },
+      [Keyboard.RIGHT]: {
+        isPressed: false, 
+        opposite: Keyboard.LEFT, 
+        movement: {axis: 'x', direction: 1}
+      },
     };
     window.addEventListener('keydown', this.setMovementAxis);
     window.addEventListener('keyup', this.resetMovementAxis);
   }
 
   setMovementAxis(e) {
-    this.keysPressed[e.keyCode] = true;
-    switch(e.keyCode) {
-      case Keyboard.DOWN:
-        this.movement.y = 1;
-        break;
-      case Keyboard.UP:
-        this.movement.y = -1;
-        break;
-      case Keyboard.LEFT:
-        this.movement.x = -1;
-        break;
-      case Keyboard.RIGHT:
-        this.movement.x = 1;
-        break;
-      default:
-        break;
-    }
+    const key = this.keys[e.keyCode];
+    key.isPressed = true;
+    this.movement[key.movement.axis] = key.movement.direction;
   }
 
   resetMovementAxis(e) {
-    this.keysPressed[e.keyCode] = false;
-    switch(e.keyCode) {
-      case Keyboard.DOWN:
-        this.movement.y = 0;
-        if (this.keysPressed[Keyboard.UP]) {
-          this.setMovementAxis({keyCode: Keyboard.UP})
-        }
-        break;
-      case Keyboard.UP:
-        this.movement.y = 0;
-        if (this.keysPressed[Keyboard.DOWN]) {
-          this.setMovementAxis({keyCode: Keyboard.DOWN})
-        }
-        break;
-      case Keyboard.LEFT:
-        this.movement.x = 0;
-        if (this.keysPressed[Keyboard.RIGHT]) {
-          this.setMovementAxis({keyCode: Keyboard.RIGHT})
-        }
-        break;
-      case Keyboard.RIGHT:
-        this.movement.x = 0;
-        if (this.keysPressed[Keyboard.LEFT]) {
-          this.setMovementAxis({keyCode: Keyboard.LEFT})
-        }
-        break;
-      default:
-        break;
+    const key = this.keys[e.keyCode];
+    key.isPressed = false;
+    if (this.keys[key.opposite].isPressed) {
+      this.setMovementAxis({keyCode: key.opposite});
+    } else {
+      this.movement[key.movement.axis] = 0;
     }
   }
 
