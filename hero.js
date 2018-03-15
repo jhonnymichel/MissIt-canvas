@@ -68,7 +68,7 @@ class Hero extends Square {
   }
 
   isStandingStill() {
-    return (this.movement.x + this.movement.y === 0);
+    return (this.movement.x === 0 && this.movement.y === 0);
   };
 
   update(ctx) {
